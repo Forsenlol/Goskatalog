@@ -33,5 +33,3 @@ if __name__ == "__main__":
     logger.info('run progress_local')
     # metro.progress_web()
     metro.progress_local()
-
-    # print(len(list(y.y.listdir('/CSC/NIR/Goskatalog/Parser/Metropolitan', n_retries=10, retry_interval=5, timeout=100))))
