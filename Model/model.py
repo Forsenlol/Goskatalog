@@ -9,13 +9,9 @@ from keras.models import Model
 import pandas as pd
 import numpy as np
 import os
-
-
-root_path = '/content/ava-mlsp/'
-
-dataset = root_path + 'metadata/AVA_data_official_test.csv';
-images_path = root_path + 'images/'
-ids = pd.read_csv(dataset)
+from os import listdir
+from os.path import isfile, join
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
 class MLSP:
@@ -30,11 +26,9 @@ class MLSP:
         self.helper = None
         self.pre = None
 
-
     def progress(self):
         model_base = apps.model_inceptionresnet_pooled(self.input_shape)
         self.pre = apps.process_input[apps.InceptionResNetV2]
-
 
         input_feats = Input(shape=(5, 5, 16928), dtype='float32')
         x = apps.inception_block(input_feats, size=1024)
@@ -62,6 +56,21 @@ class MLSP:
 
 
 def main():
+    root_path = 'C:/Users/kitov/PycharmProjects/CSC/NIR/Goskatalog/Model/ava-mlsp/'
+    photos = 'C:/Users/kitov/PycharmProjects/CSC/NIR/Photos/'
+    good = f'{photos}GOOD/'
+    bad = f'{photos}BAD/'
+    my_bad = f'{photos}MyBAD/'
+    my_good = f'{photos}MyGOOD/'
+    directions = [good, bad, my_bad, my_good]
+    filenames = list()
+    for direction in directions:
+        onlyfiles = [join(direction, f) for f in listdir(direction) if isfile(join(direction, f))]
+        filenames += onlyfiles
+    mlsp = MLSP(root_path)
+    mlsp.progress()
+    for filename in filenames:
+        print(f'{mlsp.predict(filename)} - {filename}')
 
 
 if __name__ == "__main__":
